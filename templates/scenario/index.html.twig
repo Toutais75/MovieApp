@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<style>
+.table caption{
+    color: white;
+}
+</style>
+    
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div
+                    class="table-responsive"
+                >
+                    <table
+                        class="table table-striped table-hover table-borderless table-primary align-middle"
+                    >
+                        <thead class="table-light">
+                            <caption>
+                                <h2>Liste des spectacles en cours</h2>
+                            </caption>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for S in scenarios %}
+                                <tr class="table-primary">
+                                    <td scope="row">{{ S.title }}</td>
+                                    <td>{{ S.description|u.truncate(100)| raw }}...</td>
+                                    <td>
+                                        <a class="btn btn-outline-primary" href="/scenario/{{ S.id }}">Voir</a>
+                                        <a class="btn btn-outline-primary" href="/scenario/{{ S.id }}/edit">Modifier</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                        <tfoot>
+                            
+                        </tfoot>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+   
+{% endblock %}
+

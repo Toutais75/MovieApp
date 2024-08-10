@@ -1,0 +1,24 @@
+framework:
+    workflows:
+        scene_workflow:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'currentStatus' # Le nom de la propriété dans l'entité Scene
+            supports:
+                - App\Entity\Scene
+            places:
+                - Start
+                - Writing
+                - Finished
+                - Sent
+            transitions:
+                start_writing:
+                    from: Start
+                    to: Writing
+                finish_writing:
+                    from: Writing
+                    to: Finished
+                send_scene:
+                    from: Finished
+                    to: Sent

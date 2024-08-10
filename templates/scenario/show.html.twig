@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+{% block title %}un titre{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center"> {{ scenario.title }}</h2>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Scenario
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+      {{ scenario.description|raw }}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        Scenes
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+      {# PARTIE CARD #}
+     {% for scene in scenario.scenes %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">{{ scene.title }}</h5>
+            </div>
+            <div class="card-body">
+                {{ scene.content|raw }}
+            </div>
+        </div>
+        
+     {% endfor %}
+     {# END #}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+       Personnage
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <ul class="list-group list-group-flush">
+            {% for c in characters %}
+                    <li class="list-group-item">{{ c.name }} | {{ c.actor }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

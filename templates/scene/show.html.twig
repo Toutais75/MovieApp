@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Scene: {{ scene.title }}</h1>
+    <p>Status: {{ scene.currentStatus }}</p>
+
+    {% if is_granted('ROLE_DIRECTOR') %}
+        {% if workflow_can(scene, 'start_writing') %}
+            <form method="post" action="{{ path('scene_change_status', {id: scene.id, transition: 'start_writing'}) }}">
+                <button class="btn btn-primary">Start Writing</button>
+            </form>
+        {% endif %}
+        {% if workflow_can(scene, 'finish_writing') %}
+            <form method="post" action="{{ path('scene_change_status', {id: scene.id, transition: 'finish_writing'}) }}">
+                <button class="btn btn-primary">Finish Writing</button>
+            </form>
+        {% endif %}
+        {% if workflow_can(scene, 'send_scene') %}
+            <form method="post" action="{{ path('scene_change_status', {id: scene.id, transition: 'send_scene'}) }}">
+                <button class="btn btn-primary">Send Scene</button>
+            </form>
+        {% endif %}
+    {% endif %}
+{% endblock %}

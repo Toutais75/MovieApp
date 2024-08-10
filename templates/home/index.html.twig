@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to My Symfony App{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Welcome to My Symfony App</h1>
+    <p class="text-center">This is an application for managing scenarios, scenes, characters, and actors.</p>
+    <div class="text-center mt-5">
+        <a href="{{ path('scenario_index') }}" class="btn btn-primary btn-lg">View Scenarios</a>
+    </div>
+{% endblock %}
