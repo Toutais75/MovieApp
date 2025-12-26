@@ -93,57 +93,71 @@ Effets :
 
 ## 📊 Diagramme de flux – Connexion
 
-```mermaid
-flowchart TD
-    A[Login] --> B{Compte actif ?}
-    B -- Non --> C[Refus]
-    B -- Oui --> D{Mot de passe valide ?}
-    D -- Non --> E[Erreur]
-    D -- Oui --> F{mustChangePassword ?}
-    F -- Oui --> G[Formulaire mot de passe]
-    F -- Non --> H[Espace membre]
+## 📐 Diagramme UML – Module Member
 
+```mermaid
 classDiagram
     class Member {
-        id
-        email
-        password
-        roles
-        activated
-        mustChangePassword
+        +int id
+        +string email
+        +string password
+        +array roles
+        +bool activated
+        +bool mustChangePassword
     }
 
-    class MemberVoter
-    class MemberCrudController
-    class MemberPasswordController
-    class FirstPasswordType
-    class ForcePasswordChangeSubscriber
+    class MemberVoter {
+        +supports()
+        +voteOnAttribute()
+    }
 
-    Member --> MemberVoter
-    Member --> MemberCrudController
-    Member --> MemberPasswordController
-    MemberPasswordController --> FirstPasswordType
-    ForcePasswordChangeSubscriber --> Member
+    class MemberCrudController {
+        +configureFields()
+        +configureActions()
+        +createIndexQueryBuilder()
+    }
 
+    class MemberPasswordController {
+        +password()
+    }
+
+    class FirstPasswordType {
+        +buildForm()
+    }
+
+    class ForcePasswordChangeSubscriber {
+        +onKernelRequest()
+    }
+
+    Member --> MemberVoter : secured by
+    Member --> MemberCrudController : managed by
+    Member --> MemberPasswordController : password
+    MemberPasswordController --> FirstPasswordType : uses
+    ForcePasswordChangeSubscriber --> Member : checks
+```
+## 🔄 Diagramme de séquence – Login & mot de passe
+
+```mermaid
 sequenceDiagram
     participant User
     participant Security
     participant Subscriber
     participant PasswordController
-    participant DB
+    participant Database
 
     User->>Security: login
-    Security->>DB: check credentials
-    DB-->>Security: ok
+    Security->>Database: check credentials
+    Database-->>Security: valid user
 
     Security->>Subscriber: kernel.request
-    Subscriber->>DB: check mustChangePassword
+    Subscriber->>Database: mustChangePassword ?
 
-    alt mustChangePassword
-        Subscriber-->>User: redirect password
-        User->>PasswordController: submit password
-        PasswordController->>DB: update password
-        PasswordController-->>User: redirect space
-    else
-        User-->>User: access space
+    alt mustChangePassword = true
+        Subscriber-->>User: redirect to password form
+        User->>PasswordController: submit new password
+        PasswordController->>Database: update password
+        PasswordController-->>User: redirect to space
+    else mustChangePassword = false
+        User-->>User: access space member
     end
+```
